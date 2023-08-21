@@ -32,9 +32,6 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-// Ajout de la route racine
-app.get("/", function(req, res) {
-    res.send("Hello World!");
-});
+
 
 app.use('/api/auth', authRoutes);
