@@ -16,6 +16,7 @@ const Login = () => {
       ...inputValue,
       [name]: value,
     });
+    console.log(`${name} changed to ${value}`);  // Log field change
   };
 
   const handleError = (err) =>
@@ -29,15 +30,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/login",
+        "http://localhost:4000/api/auth/login",
         {
           ...inputValue,
         },
         { withCredentials: true }
       );
-      console.log(data);
+      console.log("Response data: ", data);  // Log response data
       const { success, message } = data;
       if (success) {
         handleSuccess(message);
@@ -48,7 +50,20 @@ const Login = () => {
         handleError(message);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Request error: ", error);  // Log request error
+      if (error.response) {
+        console.log("Error response data: ", error.response.data);  // Log error response data
+      }
+      // Additional error details
+      if (error.message) {
+        console.log("Error message: ", error.message);
+      }
+      if (error.status) {
+        console.log("Error status: ", error.status);
+      }
+      if (error.stack) {
+        console.log("Error stack trace: ", error.stack);
+      }
     }
     setInputValue({
       ...inputValue,
@@ -69,6 +84,7 @@ const Login = () => {
             value={email}
             placeholder="Enter your email"
             onChange={handleOnChange}
+            autoComplete="username"
           />
         </div>
         <div>
@@ -79,6 +95,7 @@ const Login = () => {
             value={password}
             placeholder="Enter your password"
             onChange={handleOnChange}
+            autoComplete="current-password"
           />
         </div>
         <button type="submit">Submit</button>
